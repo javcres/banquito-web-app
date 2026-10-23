@@ -30,6 +30,7 @@
       transition: width .25s ease, height .25s ease;
     }
     #corner:hover, #corner:focus-visible, body.spicy #corner { width: 130px; height: 130px; }
+    body.spicy #corner { cursor: default; }
     #corner .red, #corner .flap { position: absolute; inset: 0; }
     /* Triángulo rojo que queda al descubierto (abajo a la izquierda) */
     #corner .red {
@@ -53,7 +54,7 @@
 
   <p id="question"></p>
 
-  <button id="corner" type="button" aria-label="Modo picante" aria-pressed="false">
+  <button id="corner" type="button" aria-label="Activar modo picante">
     <span class="red"></span>
     <svg viewBox="0 0 64 64" aria-hidden="true">
       <path d="M20 24 C 15 18, 13 14, 9 11" stroke="#2e7d32" stroke-width="6" stroke-linecap="round" fill="none"/>
@@ -100,14 +101,18 @@
       }
     }
 
-    // Easter egg: la esquina inferior izquierda activa/desactiva el modo picante.
-    corner.addEventListener("click", () => {
-      mode = mode === "normal" ? "picante" : "normal";
-      document.body.classList.toggle("spicy", mode === "picante");
-      corner.setAttribute("aria-pressed", mode === "picante");
-      output.textContent = "";
-      renderCategories();
-    });
+    // Easter egg: un clic en la esquina activa el modo picante. Sin vuelta atrás.
+    corner.addEventListener(
+      "click",
+      () => {
+        mode = "picante";
+        document.body.classList.add("spicy");
+        corner.disabled = true;
+        output.textContent = "";
+        renderCategories();
+      },
+      { once: true }
+    );
 
     document.getElementById("next").addEventListener("click", async () => {
       output.classList.remove("error");
