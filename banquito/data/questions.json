@@ -1,0 +1,24 @@
+{
+  "filosofica": {
+    "label": "Filosófica",
+    "questions": [
+      "Si pudieras vivir para siempre, ¿lo harías? ¿Qué cambiaría en cómo vives hoy?",
+      "¿Somos la misma persona que éramos hace diez años, o solo compartimos nombre y recuerdos?",
+      "¿Es posible ser feliz sin saber la verdad? ¿Preferirías saberla aunque duela?",
+      "¿Existe el libre albedrío o todo lo que hacemos ya estaba escrito de alguna manera?",
+      "Si nadie fuera a enterarse jamás, ¿qué cosas dejarías de hacer por pura vergüenza o por pura moral?",
+      "¿Qué es lo que realmente nos hace humanos? ¿Una inteligencia artificial podría tenerlo?"
+    ]
+  },
+  "financiera": {
+    "label": "Financiera",
+    "questions": [
+      "Si te tocaran 1.000.000 € mañana, ¿qué harías en la primera semana y en el primer año?",
+      "¿Cuánto dinero necesitarías para sentir que eres libre? ¿Y para sentir que tienes suficiente?",
+      "¿Es mejor ganar poco haciendo algo que amas o ganar mucho haciendo algo que toleras?",
+      "¿Qué es lo más caro que has comprado y te arrepientes? ¿Y lo que más valió la pena?",
+      "¿Hablar de cuánto se gana entre amigos debería ser tabú o deberíamos hacerlo más abiertamente?",
+      "¿Comprar casa es realmente una buena inversión o es solo una idea heredada de nuestros padres?"
+    ]
+  }
+}

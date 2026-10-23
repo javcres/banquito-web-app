@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>El Banquito</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #111;
+      color: #f5f5f5;
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+    h1 { font-size: clamp(3rem, 12vw, 5rem); margin: 1rem 0 2rem; }
+    select, button { font-size: 1.1rem; padding: 0.6rem 1rem; border-radius: 0.5rem; }
+    button { background: #f5b301; border: 0; cursor: pointer; font-weight: bold; }
+    #question { font-size: 1.6rem; margin-top: 2.5rem; line-height: 1.4; }
+    #question.error { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <h1>El Banquito</h1>
+
+  <select id="category" aria-label="Categoría">
+    <option value="">Todas las categorías</option>
+    {% for slug, label in categories.items() %}
+    <option value="{{ slug }}">{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button id="next">Siguiente pregunta</button>
+
+  <p id="question"></p>
+
+  <script>
+    const output = document.getElementById("question");
+
+    {% if static %}
+    // Versión estática (GitHub Pages): las preguntas van embebidas en la página.
+    const QUESTIONS = {{ questions|tojson }};
+
+    async function getQuestion(category) {
+      const pool = category
+        ? QUESTIONS[category]
+        : Object.values(QUESTIONS).flat();
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+    {% else %}
+    async function getQuestion(category) {
+      const url = "/question/" + (category ? "?category=" + encodeURIComponent(category) : "");
+      const response = await fetch(url);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error);
+      return data.question;
+    }
+    {% endif %}
+
+    document.getElementById("next").addEventListener("click", async () => {
+      const category = document.getElementById("category").value;
+      output.classList.remove("error");
+      try {
+        output.textContent = await getQuestion(category);
+      } catch (e) {
+        output.classList.add("error");
+        output.textContent = "No se pudo cargar la pregunta. Inténtalo de nuevo.";
+      }
+    });
+  </script>
+</body>
+</html>

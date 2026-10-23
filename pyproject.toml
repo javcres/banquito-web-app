@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "banquito"
+version = "0.1.0"
+description = "Preguntas abiertas para charlar a las 4 de la mañana."
+authors = ["Banquito <banquito@example.com>"]
+readme = "README.md"
+packages = [{ include = "banquito" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^3.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.0"
+ruff = "^0.6"
+
+[build-system]
+requires = ["poetry-core>=1.9"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+# E/F: pycodestyle + pyflakes, I: isort, B: bugbear, UP: pyupgrade
+select = ["E", "F", "I", "B", "UP"]
