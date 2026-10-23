@@ -23,26 +23,35 @@
     /* Modo picante (easter egg) */
     body.spicy { background: #2b0a0a; }
     body.spicy button#next { background: #e63946; color: #fff; }
+    /*
+     * Esquina que se despega. El botón mide 140x140 y se escala desde la
+     * esquina inferior izquierda: en reposo es una pestaña diminuta (pegada) y
+     * al pasar el ratón se despega con una transición. La zona de ratón es la
+     * del botón ya escalado, así que se vuelve a pegar al salir.
+     */
     #corner {
       position: fixed; left: 0; bottom: 0;
-      width: 44px; height: 44px;
+      width: 140px; height: 140px;
       padding: 0; border: 0; background: none; cursor: pointer;
-      transition: width .25s ease, height .25s ease;
+      transform-origin: 0 100%;
+      transform: scale(.16);
+      transition: transform .35s cubic-bezier(.2, .8, .2, 1);
     }
-    #corner:hover, #corner:focus-visible, body.spicy #corner { width: 130px; height: 130px; }
+    #corner:hover, #corner:focus-visible, body.spicy #corner { transform: scale(1); }
     body.spicy #corner { cursor: default; }
-    #corner .red, #corner .flap { position: absolute; inset: 0; }
-    /* Triángulo rojo que queda al descubierto (abajo a la izquierda) */
+    #corner span, #corner svg { position: absolute; }
+    /* Lo que queda al descubierto bajo la esquina: rojo con el jalapeño */
     #corner .red {
-      background: #d62828;
+      inset: 0;
+      background: linear-gradient(to top right, #e63946, #a4161a 50%);
       clip-path: polygon(0 0, 0 100%, 100% 100%);
     }
-    #corner svg { position: absolute; left: 6%; bottom: 6%; width: 55%; height: 55%; }
-    /* Solapa de la esquina doblada (arriba a la derecha) */
+    #corner svg { left: 7%; bottom: 7%; width: 50%; height: 50%; }
+    /* Reverso de la esquina doblada sobre la hoja */
     #corner .flap {
-      background: linear-gradient(135deg, #bbb, #eee 60%, #fff);
+      inset: 0;
+      background: linear-gradient(to top right, #8a8a8a 50%, #f4f4f4 85%);
       clip-path: polygon(0 0, 100% 0, 100% 100%);
-      filter: drop-shadow(0 0 4px rgba(0, 0, 0, .6));
     }
   </style>
 </head>
