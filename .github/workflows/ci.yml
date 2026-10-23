@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: pipx install poetry
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: poetry
+
+      - run: poetry install
+
+      - name: Black
+        run: poetry run black --check .
+
+      - name: Ruff
+        run: poetry run ruff check .
+
+      - name: Build static site
+        run: poetry run python -m banquito.build_static

@@ -14,6 +14,12 @@ Abre http://127.0.0.1:5000. API: `GET /question/?category=filosofica`
 
 ## Formato y lint
 
+Los hooks de pre-commit ejecutan Black y Ruff, y bloquean commits directos a `main`:
+
+    poetry run pre-commit install   # una sola vez
+
+También se pueden lanzar a mano:
+
     poetry run black .
     poetry run ruff check --fix .
 
