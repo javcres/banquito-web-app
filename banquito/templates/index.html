@@ -19,54 +19,112 @@
     button { background: #f5b301; border: 0; cursor: pointer; font-weight: bold; }
     #question { font-size: 1.6rem; margin-top: 2.5rem; line-height: 1.4; }
     #question.error { color: #ff6b6b; }
+
+    /* Modo picante (easter egg) */
+    body.spicy { background: #2b0a0a; }
+    body.spicy button#next { background: #e63946; color: #fff; }
+    #corner {
+      position: fixed; left: 0; bottom: 0;
+      width: 44px; height: 44px;
+      padding: 0; border: 0; background: none; cursor: pointer;
+      transition: width .25s ease, height .25s ease;
+    }
+    #corner:hover, #corner:focus-visible, body.spicy #corner { width: 130px; height: 130px; }
+    body.spicy #corner { cursor: default; }
+    #corner .red, #corner .flap { position: absolute; inset: 0; }
+    /* Triángulo rojo que queda al descubierto (abajo a la izquierda) */
+    #corner .red {
+      background: #d62828;
+      clip-path: polygon(0 0, 0 100%, 100% 100%);
+    }
+    #corner svg { position: absolute; left: 6%; bottom: 6%; width: 55%; height: 55%; }
+    /* Solapa de la esquina doblada (arriba a la derecha) */
+    #corner .flap {
+      background: linear-gradient(135deg, #bbb, #eee 60%, #fff);
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      filter: drop-shadow(0 0 4px rgba(0, 0, 0, .6));
+    }
   </style>
 </head>
 <body>
   <h1>El Banquito</h1>
 
-  <select id="category" aria-label="Categoría">
-    <option value="">Todas las categorías</option>
-    {% for slug, label in categories.items() %}
-    <option value="{{ slug }}">{{ label }}</option>
-    {% endfor %}
-  </select>
+  <select id="category" aria-label="Categoría"></select>
   <button id="next">Siguiente pregunta</button>
 
   <p id="question"></p>
 
+  <button id="corner" type="button" aria-label="Activar modo picante">
+    <span class="red"></span>
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M20 24 C 15 18, 13 14, 9 11" stroke="#2e7d32" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M18 24 C 30 14, 52 30, 57 46 C 58 53, 52 55, 46 53 C 30 49, 11 39, 18 24 Z" fill="#43a047" stroke="#1b5e20" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M26 28 C 34 28, 44 36, 48 44" stroke="#a5d6a7" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </svg>
+    <span class="flap"></span>
+  </button>
+
   <script>
+    const CATEGORIES = {{ categories|tojson }};
     const output = document.getElementById("question");
+    const select = document.getElementById("category");
+    const corner = document.getElementById("corner");
+    let mode = "normal";
 
     {% if static %}
     // Versión estática (GitHub Pages): las preguntas van embebidas en la página.
     const QUESTIONS = {{ questions|tojson }};
 
     async function getQuestion(category) {
-      const pool = category
-        ? QUESTIONS[category]
-        : Object.values(QUESTIONS).flat();
+      const slugs = category
+        ? [category]
+        : Object.keys(CATEGORIES).filter((s) => CATEGORIES[s].mode === mode);
+      const pool = slugs.flatMap((s) => QUESTIONS[s]);
       return pool[Math.floor(Math.random() * pool.length)];
     }
     {% else %}
     async function getQuestion(category) {
-      const url = "/question/" + (category ? "?category=" + encodeURIComponent(category) : "");
-      const response = await fetch(url);
+      const params = new URLSearchParams();
+      if (category) params.set("category", category);
+      else params.set("mode", mode);
+      const response = await fetch("/question/?" + params);
       const data = await response.json();
       if (!response.ok) throw new Error(data.error);
       return data.question;
     }
     {% endif %}
 
+    function renderCategories() {
+      select.replaceChildren(new Option("Todas las categorías", ""));
+      for (const [slug, info] of Object.entries(CATEGORIES)) {
+        if (info.mode === mode) select.append(new Option(info.label, slug));
+      }
+    }
+
+    // Easter egg: un clic en la esquina activa el modo picante. Sin vuelta atrás.
+    corner.addEventListener(
+      "click",
+      () => {
+        mode = "picante";
+        document.body.classList.add("spicy");
+        corner.disabled = true;
+        output.textContent = "";
+        renderCategories();
+      },
+      { once: true }
+    );
+
     document.getElementById("next").addEventListener("click", async () => {
-      const category = document.getElementById("category").value;
       output.classList.remove("error");
       try {
-        output.textContent = await getQuestion(category);
+        output.textContent = await getQuestion(select.value);
       } catch (e) {
         output.classList.add("error");
         output.textContent = "No se pudo cargar la pregunta. Inténtalo de nuevo.";
       }
     });
+
+    renderCategories();
   </script>
 </body>
 </html>

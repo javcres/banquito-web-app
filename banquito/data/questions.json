@@ -20,5 +20,33 @@
       "¿Hablar de cuánto se gana entre amigos debería ser tabú o deberíamos hacerlo más abiertamente?",
       "¿Comprar casa es realmente una buena inversión o es solo una idea heredada de nuestros padres?"
     ]
+  },
+  "red_flags": {
+    "label": "Red flags",
+    "mode": "picante",
+    "questions": [
+      "¿Crees que contestar mensajes en el móvil mientras alguien te habla es una red flag?",
+      "¿Crees que llegar siempre \"cinco minutitos\" tarde es una red flag?",
+      "¿Crees que ser seco o maleducado con el camarero es una red flag?",
+      "¿Crees que no tener ningún amigo de toda la vida es una red flag?",
+      "¿Crees que hablar mal de todos tus ex es una red flag?",
+      "¿Crees que no saber cocinar absolutamente nada es una red flag?",
+      "¿Crees que dejar a alguien en visto durante días es una red flag?",
+      "¿Crees que ver videos en el altavoz en el transporte público es una red flag?"
+    ]
+  },
+  "green_flags": {
+    "label": "Green flags",
+    "mode": "picante",
+    "questions": [
+      "¿Crees que acordarse del pedido habitual de tus amigos es una green flag?",
+      "¿Crees que tratar con amabilidad a quien te atiende en un bar es una green flag?",
+      "¿Crees que saber decir \"no lo sé\" sin disimular es una green flag?",
+      "¿Crees que avisar con un \"ya llegué a casa\" es una green flag?",
+      "¿Crees que que los perros y los niños adoren a alguien es una green flag?",
+      "¿Crees que pedir perdón sin poner excusas es una green flag?",
+      "¿Crees que seguir en contacto con sus amigos de la infancia es una green flag?",
+      "¿Crees que ofrecerse a lavar los platos tras una cena en casa ajena es una green flag?"
+    ]
   }
 }
